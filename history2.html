@@ -1,0 +1,128 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>history</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .tabs {
+            margin-left: 1em;
+        }
+
+        .tabs a {
+            display: inline-block;
+            position: relative;
+            top: 1px;
+            padding: 0.5em;
+            background-color: grey;
+            color: white;
+        }
+
+        .tabs a.selected {
+            border: 1px solid black;
+            border-bottom-color: white;
+            background-color: white;
+            color: black;
+        }
+
+        .tab {
+            margin: 0 0.5em;
+            border: 1px solid black;
+            padding: 1em;
+        }
+    </style>
+</head>
+
+<body>
+    <section>
+        <nav class="tabs">
+            <a data-tab="tab-1" href="#" class="selected">Tab 1</a>
+            <a data-tab="tab-2" href="#">Tab 2</a>
+            <a data-tab="tab-3" href="#">Tab 3</a>
+        </nav>
+        <p class="tab" id="tab-1">This is the tab 1.</p>
+        <p class="tab" id="tab-2" hidden>This is the tab 2.</p>
+        <p class="tab" id="tab-3" hidden>This is the tab 3.</p>
+    </section>
+
+    <script>
+        // The history API
+        // https://developer.mozilla.org/en-US/docs/Web/Guide/API/DOM/Manipulating_the_browser_history
+
+        // Get the links
+        var links = [].slice.call(document.querySelectorAll('a'));
+
+        /*
+        Once we have show the proper tab and select the link we add a
+        crafted history entry with history.pushState(). The first parameter
+        is an object that reflects the current state of the webpage. The
+        second is a title currently ignored and the third is an URL that
+        will replace the current one but the browser won't try to load.
+        */
+        links.forEach(function (link) {
+            link.onclick = function (evt) {
+                var tabId = evt.target.dataset.tab;
+                openTab(tabId);
+
+                // Avoid real navigation
+                evt.preventDefault();
+                // Add faked navigation
+                history.pushState({
+                    currentTab: tabId
+                }, null, tabId);
+            };
+        });
+
+        function openTab(tabId) {
+            showTab(tabId);
+            selectTab(tabId);
+        }
+
+        /*
+        When back button is pressed, a pop state event occurs. This is a callback
+        for that event. In the evt.state property there is the state object you
+        set with pushState() method. This allow us to return to the previous tab.
+        */
+        window.onpopstate = function (evt) {
+            openTab(evt.state.currentTab);
+        };
+
+        /*
+        On restoring the webpage (i.e. after accidentally closing it), no
+        pop state event is launched the state object is restored and saved
+        in history.state property. You can use this property to get the
+        current state.
+        */
+        if (history.state && history.state.currentTab) {
+            openTab(history.state.currentTab);
+        }
+
+        /*
+        Furthermore, you can use history.replaceState() to re-set the current
+        state. This is useful to update the current state object.
+        */
+
+        function showTab(id) {
+            var tabs = [].slice.call(document.querySelectorAll('.tab'));
+            tabs.forEach(function (tab) {
+                tab.hidden = tab.id === id ? false : true;
+            });
+        }
+
+        function selectTab(id) {
+            var links = [].slice.call(document.querySelectorAll('.tabs a'));
+            links.forEach(function (link) {
+                link.classList[link.dataset.tab === id ? 'add' : 'remove']('selected');
+            });
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,154 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>HistoryAPI</title>
+
+    <style>
+        html {
+            font-family: Helvetica, Arial, sans-serif;
+            font-size: 100%;
+            background: #333;
+        }
+
+        html #page-wrapper {
+            width: 600px;
+            background: #fff;
+            padding: 1em;
+            margin: 1em auto;
+            min-height: 300px;
+            border-top: 5px solid #69c773;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+        }
+
+        html #page-wrapper nav {
+            padding-bottom: .5em;
+            border-bottom: 1px solid #eee;
+        }
+
+        html #page-wrapper nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        html #page-wrapper nav ul li {
+            display: inline;
+            padding-right: 1em;
+        }
+
+        html #page-wrapper nav ul li a {
+            color: #4090ba;
+            text-decoration: none;
+        }
+
+        html #page-wrapper nav ul li a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="page-wrapper">
+        <nav>
+            <ul>
+                <li>
+                    <a href="index.html" class="load-content">Home</a>
+                </li>
+                <li>
+                    <a href="about.html" class="load-content">About</a>
+                </li>
+                <li>
+                    <a href="products.html" class="load-content">Products</a>
+                </li>
+                <li>
+                    <a href="contact.html" class="load-content">Contact Us</a>
+                </li>
+            </ul>
+        </nav>
+
+        <h1 id="title"></h1>
+        <div id="content"></div>
+
+    </div>
+
+    <script>
+        /*
+
+        What does this pen do?
+          Basically, this pen applies the basic principles of History API. Nothing more, nothing less.
+          
+          This is not my work. All credit goes to teamtreehouse.com fo this great tutorial.
+
+        Visit the blog: http://blog.teamtreehouse.com/getting-started-with-the-history-api
+
+        */
+
+        //history api start
+
+        //create the object for the pages
+        window.onload = function () {
+            var pages = {
+                index: {
+                    title: "Home Page",
+                    content: "This is the Home Page."
+                },
+                about: {
+                    title: "About Page",
+                    content: "This is the About Page."
+                },
+                products: {
+                    title: "Product Page",
+                    content: "This is the Products Page."
+                },
+                contact: {
+                    title: "Contact Us",
+                    content: "This is the Contact Page."
+                }
+            }
+
+            //take the references
+            var navLinks = document.querySelectorAll('.load-content'),
+                pageTitle = document.getElementById('title'),
+                pageContent = document.getElementById('content');
+
+            //update the page content
+            var updateContent = function (stateObj) {
+                if (stateObj) {
+                    document.title = stateObj.title;
+                    pageTitle.innerHTML = stateObj.title;
+                    pageContent.innerHTML = stateObj.content;
+                }
+            }
+
+            //create event to fire on link click
+            for (var i = 0; i < navLinks.length; ++i) {
+                navLinks[i].addEventListener('click', function (e) {
+                    e.preventDefault();
+
+                    //fetch the data
+                    var theUrl = this.attributes['href'].value,
+                        theData = pages[theUrl.split('.')[0]];
+
+                    //update title and content
+                    updateContent(theData);
+
+                    //create a new history item
+                    history.pushState(theData, theData.title, theUrl);
+                });
+            }
+
+            window.addEventListener('popstate', function () {
+                updateContent(event.state);
+            });
+
+            updateContent(pages.index);
+
+            history.replaceState(pages.index, pages.index.title, '');
+        }
+    </script>
+</body>
+
+</html>

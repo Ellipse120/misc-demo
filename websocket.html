@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+    <title>Document</title>
+
+</head>
+
+<body>
+    <button onclick="down()">download</button>
+
+    <script>
+      function down() {
+          axios.get('http://192.168.125.63:12345/api/File/DownLoad/33')
+          .then((response) => {
+              debugger
+              var header = response.headers;
+              var blob = new Blob([response.data], {type: header['content-type']});
+              var link = document.createElement('a');
+              link.href = window.URL.createObjectURL(blob);
+              link.download = "eee.xls";
+              link.click();
+          })
+      }
+    </script>
+</body>
+
+</html>

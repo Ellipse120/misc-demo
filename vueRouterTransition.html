@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/animate.css@3.5.1" rel="stylesheet" type="text/css">
+
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+
+    <style>
+        .fade-enter-active,
+        .fade-leave-active {
+            transition: opacity 1s ease-out;
+        }
+
+        .fade-enter,
+        .fade-leave-to {
+            opacity: 0
+        }
+
+        .slide-right-enter-active,
+        .slide-right-leave-active {
+            transition: opacity 2s ease-out;
+        }
+
+        .slide-right-enter,
+        .slide-right-leave-to {
+            opacity: 0;
+        }
+
+        .slide-left-enter-active,
+        .slide-left-leave-active {
+            transition: opacity 2s ease-in-out;
+        }
+
+        .slide-left-enter,
+        .slide-left-leave-to {
+            opacity: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <h1>Transitions</h1>
+        <ul>
+            <li>
+                <router-link to="/">/</router-link>
+            </li>
+            <li>
+                <router-link to="/parent">/parent</router-link>
+            </li>
+            <li>
+                <router-link to="/parent/foo">/parent/foo</router-link>
+            </li>
+            <li>
+                <router-link to="/parent/bar">/parent/bar</router-link>
+            </li>
+        </ul>
+        <!-- <div id="example-3">
+            <button @click="show = !show">
+                Toggle render
+            </button>
+            <transition name="custom-classes-transition" enter-active-class="animated tada" leave-active-class="animated bounceOutRight">
+                <p v-if="show">hello</p>
+            </transition>
+        </div> -->
+        <transition name="fade" mode="out-in">
+            <router-view class="view"></router-view>
+        </transition>
+    </div>
+
+
+    <script>
+        Vue.use(VueRouter)
+
+        const Home = {
+            template: `
+              <div class="home">
+                <h2>Home</h2>
+                <p>hello</p>
+              </div>
+            `
+        }
+
+        const Parent = {
+            data() {
+                return {
+                    transitionName: 'slide-left'
+                }
+            },
+            // dynamically set transition based on route change
+            watch: {
+                '$route' (to, from) {
+                    const toDepth = to.path.split('/').length
+                    const fromDepth = from.path.split('/').length
+                    this.transitionName = toDepth < fromDepth ? 'slide-right' : 'slide-left'
+                }
+            },
+            template: `
+              <div class="parent">
+                <h2>Parent</h2>
+                <transition :name="transitionName">
+                  <router-view class="child-view"></router-view>
+                </transition>
+              </div>
+            `
+        }
+
+        const Default = {
+            template: '<div class="default">default</div>'
+        }
+        const Foo = {
+            template: '<div class="foo">foo</div>'
+        }
+        const Bar = {
+            template: '<div class="bar">bar</div>'
+        }
+
+        const router = new VueRouter({
+            mode: 'history',
+            base: '/',
+            routes: [{
+                    path: '/',
+                    component: Home
+                },
+                {
+                    path: '/parent',
+                    component: Parent,
+                    children: [{
+                            path: '',
+                            component: Default
+                        },
+                        {
+                            path: 'foo',
+                            component: Foo
+                        },
+                        {
+                            path: 'bar',
+                            component: Bar
+                        }
+                    ]
+                }
+            ]
+        })
+
+        new Vue({
+            el: '#app',
+            router,
+            data: {
+                show: true
+            }
+        }).$mount('#app')
+    </script>
+
+
+</body>
+
+</html>
