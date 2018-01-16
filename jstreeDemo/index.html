@@ -9,10 +9,10 @@
 	h1 { font-size:1.8em; }
 	.demo { overflow:auto; border:1px solid silver; min-height:100px; }
 	</style>
-	<link rel="stylesheet" href="../bootstrap/themes/default/style.min.css" />
+	<link rel="stylesheet" href="../bootstrap/themes/default/style.min.css">
 </head>
 <body>
-	<h1>HTML demo</h1>
+	<h1>js tree demo</h1>
 	<div id="html" class="demo">
 		<ul>
 			<li data-jstree='{ "opened" : true }'>Root node
@@ -59,7 +59,8 @@
 						{ "text" : "Child node 2" }
 				]}
 			]
-		}
+		},
+		"plugins": ["contextmenu"]
 	});
 
 	// data format demo
