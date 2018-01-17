@@ -76,22 +76,77 @@
 		// inline data demo
 		$('#data').jstree({
 			'core': {
+				"animation": 110,
+				"check_callback": true,
+				"themes": {
+					"stripes": true
+				},
 				'data': [{
-					"text": "Root node",
+					"text": "品种类型",
 					"children": [{
-							"text": "Child node 1"
+							"text": "品种 1",
+							"children": [
+								{
+									"text": "品牌1"
+								},
+								{
+									"text": "品牌2"
+								}
+							]
 						},
 						{
-							"text": "Child node 2"
+							"text": "品种 2"
 						}
 					]
 				}]
 			},
+			"types": {
+				"#": {
+					"max_children": 1,
+					"max_depth": 4,
+					"valid_children": ["root"]
+				},
+				"root": {
+					"icon": "/static/3.3.5/assets/images/tree_icon.png",
+					"valid_children": ["default"]
+				},
+				"default": {
+					"valid_children": ["default", "file"]
+				},
+				"file": {
+					"icon": "glyphicon glyphicon-file",
+					"valid_children": []
+				}
+			},
 			"plugins": [
 				"contextmenu", "dnd", "search",
 				"state", "types", "wholerow"
-			]
+			],
+			"contextmenu": {
+				items: customMenu
+			}
 		});
+
+		function customMenu(node) {
+			// The default set of all items
+			var items = {
+				renameItem: { // The "rename" menu item
+					label: "Rename",
+					action: function () {}
+				},
+				deleteItem: { // The "delete" menu item
+					label: "Delete",
+					action: function () {}
+				}
+			};
+
+			if ($(node).hasClass("folder")) {
+				// Delete the "delete" menu item
+				delete items.deleteItem;
+			}
+
+			return items;
+		}
 
 		// data format demo
 		$('#frmt').jstree({
