@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <!-- <div id="app">
+        <div>
+            Item id to pick (integer from 0 to 10):
+            <input type="text" v-model="inputValue">
+            <button v-on:click="pickItem">
+                Pick item
+            </button>
+        </div>
+        <div>
+            Item id: {{ item._id }}
+        </div>
+        <div>
+            Item name: {{ item.name }}
+        </div>
+        <div>
+            Item quantity: {{ item.quantity }}
+        </div>
+    </div> -->
+    <!-- <script>
+        var items = (function () {
+            var elems = {};
+
+            for (var index = 0; index < 11; index++) {
+                elems[index] = Object.freeze({
+                    _id: index,
+                    name: 'item' + index,
+                    quantity: 0
+                })
+            }
+
+            return elems;
+        }())
+
+        /*This interval simulates incoming network (websocket) messages over the time which update an item with its new data*/
+        setInterval(() => {
+            var randomItemId = Math.floor(Math.random() * (10 - 0 + 1)) + 0;
+            let oldItem = items[randomItemId];
+            let newItem = Object.assign({}, oldItem, {
+                quantity: oldItem.quantity + 1
+            });
+            Vue.set(items, randomItemId, Object.freeze(newItem))
+        }, 100);
+
+        var app = new Vue({
+            el: '#app',
+            data: {
+                items: items,
+                inputValue: '',
+                pickedElemId: ''
+            },
+            computed: {
+                item() {
+                    return this.items[this.pickedElemId] || {}
+                }
+            },
+            methods: {
+                pickItem: function pickItem() {
+                    this.pickedElemId = this.inputValue;
+                }
+            }
+        })
+    </script> -->
+
+    <div id="app">
+        <div>
+          Item id to pick (integer from 0 to 10):
+          <input type="text" v-model="pickedElemId">
+          <button v-on:click="pickItem">
+            Pick item
+          </button>
+        </div>
+        <div>
+          Item id: {{ item._id }}
+        </div>
+        <div>
+          Item name: {{ item.name }}
+        </div>
+          <div>
+          Item quantity: {{ item.quantity }}
+        </div>
+      </div>
+
+    <script>
+        var items = (function () {
+            var elems = {};
+
+            for (var index = 0; index < 11; index++) {
+                elems[index] = {
+                    _id: index,
+                    name: 'item' + index,
+                    quantity: 0
+                }
+            }
+
+            return elems;
+        }())
+
+        /*This interval simulates incoming network (websocket) messages over the time which update an item with its new data*/
+        setInterval(() => {
+            var randomItemId = Math.floor(Math.random() * (10 - 0 + 1)) + 0;
+            items[randomItemId].quantity++;
+        }, 100);
+
+        var app = new Vue({
+            el: '#app',
+            data: {
+                item: {},
+                pickedElemId: ''
+            },
+            methods: {
+                pickItem: function pickItem() {
+                    this.item = items[this.pickedElemId];
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

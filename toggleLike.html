@@ -1,30 +1,49 @@
 <!DOCTYPE html>
 <html>
-<head>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<style>
-.fa {
-    font-size: 50px;
-    cursor: pointer;
-    user-select: none;
-}
 
-.fa:hover {
-  color: darkblue;
-}
-</style>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        .fa {
+            font-size: 50px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .fa:hover {
+            color: darkblue;
+        }
+    </style>
 </head>
+
 <body>
 
-<p>Click on the icon to toggle between thumbs-up and thumbs-down (like/dislike):</p>
+    <p>Click on the icon to toggle between thumbs-up and thumbs-down (like/dislike):</p>
+    <div id="test">requestAnimationFrame</div>
 
-<i onclick="myFunction(this)" class="fa fa-thumbs-up"></i>
+    <i onclick="myFunction(this)" class="fa fa-thumbs-up"></i>
 
-<script>
-function myFunction(x) {
-    x.classList.toggle("fa-thumbs-down");
-}
-</script>
+    <script>
+        function myFunction(x) {
+            x.classList.toggle("fa-thumbs-down");
+        }
+
+        var start = null;
+        var element = document.getElementById('test');
+        element.style.position = 'absolute';
+
+        function step(timestamp) {
+            if (!start) start = timestamp;
+            var progress = timestamp - start;
+            element.style.left = Math.min(progress / 10, 200) + 'px';
+            if (progress < 2000) {
+                window.requestAnimationFrame(step);
+            }
+        }
+
+        window.requestAnimationFrame(step);
+    </script>
 
 </body>
+
 </html>

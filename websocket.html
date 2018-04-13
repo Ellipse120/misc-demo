@@ -18,7 +18,6 @@
       function down() {
           axios.get('http://192.168.125.63:12345/api/File/DownLoad/33')
           .then((response) => {
-              debugger
               var header = response.headers;
               var blob = new Blob([response.data], {type: header['content-type']});
               var link = document.createElement('a');
