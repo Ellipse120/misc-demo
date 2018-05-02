@@ -23,6 +23,13 @@
 
     <i onclick="myFunction(this)" class="fa fa-thumbs-up"></i>
 
+    <div>
+        <button class="download">fetch</button>
+
+        <button class="abort">cancel fetch</button>
+    </div>
+   
+
     <script>
         function myFunction(x) {
             x.classList.toggle("fa-thumbs-down");
@@ -42,6 +49,29 @@
         }
 
         window.requestAnimationFrame(step);
+
+        // AbortController
+        var controller = new AbortController();
+        var signal = controller.signal;
+
+        var downloadBtn = document.querySelector('.download');
+        var abortBtn = document.querySelector('.abort');
+
+        downloadBtn.addEventListener('click', fetchData);
+
+        abortBtn.addEventListener('click', function() {
+            controller.abort();
+            console.log('fetch data cancel or aborted...');
+        });
+
+        function fetchData() {
+            fetch('https://api.github.com/users/dddd', { signal }).then(function(response) {
+                console.log(response);
+            }).catch(function(e) {
+                console.log('get data error: ' + e.message);
+            })
+        }
+
     </script>
 
 </body>

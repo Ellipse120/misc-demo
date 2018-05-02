@@ -9,7 +9,8 @@
 </head>
 
 <body>
-  <script src="https://npmcdn.com/vue/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+
 
   <div id="app">
     <button @click="comp = 'Home'">/home</button>
@@ -27,7 +28,7 @@
         return {
           text: 'home'
         }
-      },
+      }
     }
     const Foo = {
       name: 'Foo',
@@ -36,7 +37,7 @@
         return {
           text: 'Foo'
         }
-      },
+      }
     }
 
 
@@ -49,6 +50,12 @@
       components: {
         Home,
         Foo
+      },
+      beforeDestroy () {
+        console.log(this, ' * before')
+      },
+      destroyed () {
+        console.log(this, ' *');
       }
     })
   </script>
