@@ -23,7 +23,17 @@
     <div>
         <Cascader :data="dataCascade"></Cascader>
     </div>
+
 </div>
+<p id="hostElement"></p>
+
+<script>
+    var shadow = document.querySelector('#hostElement').attachShadow({mode: 'open'});
+    shadow.innerHTML = '<p>Here is some new test.</p>';
+    shadow.innerHTML += '<style>p { color: red; }</style>';
+</script>
+    
+    
 <script>
     new Vue({
         el: '#app',
